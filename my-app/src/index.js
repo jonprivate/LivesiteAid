@@ -5,62 +5,51 @@ import './materialize/css/materialize.min.css';
 
 class Board extends React.Component {
     render() {
-        var deck = new Deck();
-        var card = new Card();
-        card.title = "Card Title";
-        card.content = "This is a dummy content that has no specific meaning. Use this as the default content of the card.";
-        var link1 = new Link();
-        link1.content = "Here's the 1st link";
-        var link2 = new Link();
-        link2.content = "Here's the 2nd link";
-        card.addAction(link1);
-        card.addAction(link2);
-        deck.insert(card);
-        return deck.render();
+        var cards = new Array();
+        cards.push(<Card
+            title="Card Title"
+            content="This is a dummy content that has no specific meaning. Use this as the default content of the card."
+            actions={[
+                <Action content = "Here's the 1st link"/>,
+                <Action content = "Here's the 2nd link"/>]} />);
+        cards.push(<Card
+            title="Card Title"
+            content="This is a dummy content that has no specific meaning. Use this as the default content of the card."
+            actions={[
+                <Action content = "Here's the 1st link"/>,
+                <Action content = "Here's the 2nd link"/>]} />);
+        const deck = <Deck cards={cards} />;
+        cards.push(<Card
+            title="Card Title"
+            content="This is a dummy content that has no specific meaning. Use this as the default content of the card."
+            actions={[
+                <Action content = "Here's the 1st link"/>,
+                <Action content = "Here's the 2nd link"/>]} />);
+        return <div class="container">{deck}</div>;
     }
 }
 
 class Deck extends React.Component {
-    constructor(props) {
-        super(props);
-        this.cards = new Array();
-    }
-
-    insert(card) {
-        this.cards.push(card);
-    }
-
     render() {
         return (
             <div class="row">
-                {this.cards.map(card => {card.render()})}
+                {this.props.cards}
             </div>
         );
     }
 }
 
 class Card extends React.Component {
-    constructor(props) {
-        super(props);
-        this.actions = new Array();
-        this.title = "Card Title";
-        this.content = "This is a dummy content that has no specific meaning. Use this as the default content of the card.";
-    }
-
-    addAction(action) {
-        this.actions.push(action);
-    }
-
     render() {
         return (
-            <div class="col s4 m4 l2">
+            <div class="col s4 m4 l3">
                 <div class="card blue-grey darken-1">
                     <div class="card-content white-text">
                         <span class="card-title">{this.props.title}</span>
                         <p>{this.props.content}</p>
                     </div>
                     <div class="card-action">
-                        {this.actions.map(action => {action.render()})}
+                        {this.props.actions}
                     </div>
                 </div>
             </div>
@@ -68,16 +57,18 @@ class Card extends React.Component {
     }
 }
 
-class Link extends React.Component {
-    constructor(props) {
-        super(props);
-        this.href = "#";
-        this.content = "This is a link";
-    }
-
+class Action extends React.Component {
     render() {
+        var href = "#";
+        if (this.props.href) {
+            href = this.props.href;
+        }
+        var content = "action";
+        if (this.props.content) {
+            content = this.props.content;
+        }
         return (
-            <a href={this.href}>{this.content}</a>
+            <a href={href}>{content}</a>
         );
     }
 }
